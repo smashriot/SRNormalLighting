@@ -42,11 +42,21 @@ public class SRNormalLighting : MonoBehaviour {
 	// ------------------------------------------------------------------------
 	private void setupLighting(){
 		
+		// define the shader and reuse this shader on the sprites so the FRenderLayers continue to batch properly
+        // SRLightingShader(string normalTexture, float shininess, Color diffuseColor, Color specularColor)
+		SRLightingShader lightingShader = new SRLightingShader(ROCKS_NORMAL, 2.5f, Color.white, Color.white);
+		
 		// sprite uses the SRLightingShader for normal mapped lighting
-		FSprite rockSprite = new FSprite(ROCKS_SPRITE); 
-		//                      SRLightingShader(string normalTexture, float shininess, Color diffuseColor, Color specularColor)
-		rockSprite.shader = new SRLightingShader(ROCKS_NORMAL, 2.5f, Color.white, Color.white); // lighting magic!
-		Futile.stage.AddChild(rockSprite);
+		FSprite leftRockSprite = new FSprite(ROCKS_SPRITE); 
+		leftRockSprite.shader = lightingShader; // do NOT create a new Shader for each sprite. Doing so would break FRenderLayer batching
+		leftRockSprite.SetAnchor(1.0f, 0.5f);
+		Futile.stage.AddChild(leftRockSprite);
+		
+        // sprite uses the SRLightingShader for normal mapped lighting
+		FSprite rightRockSprite = new FSprite(ROCKS_SPRITE); 
+		rightRockSprite.shader = lightingShader; // do NOT create a new Shader for each sprite. Doing so would break FRenderLayer batching
+		rightRockSprite.SetAnchor(0.0f, 0.5f);
+		Futile.stage.AddChild(rightRockSprite);
 
 		// add light gameobject
         lightGameObject = new GameObject("Light");
@@ -60,6 +70,7 @@ public class SRNormalLighting : MonoBehaviour {
         lightSource.type = LightType.Point;
         lightSource.renderMode = LightRenderMode.ForcePixel; // ForcePixel = Important
     }
+    
 
 	// ------------------------------------------------------------------------
 	// ------------------------------------------------------------------------
@@ -70,8 +81,6 @@ public class SRNormalLighting : MonoBehaviour {
         // circle light around and up/down between -30..0. light must be negative.
         // closer to 0 = tight spot, farther away = wider spot.
         lightGameObject.transform.localPosition = new Vector3(150.0f * Mathf.Cos(counter), 150.0f * Mathf.Sin(counter), -Mathf.Abs(lightDepth * Mathf.Sin(0.5f * counter)));
-        
-
         lightSource.color = this.HSVtoRGB(Mathf.Abs(Mathf.Sin(0.5f * counter)), 1.0f, 1.0f, 1.0f);
 	}
 	

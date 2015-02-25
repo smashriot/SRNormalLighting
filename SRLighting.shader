@@ -37,7 +37,7 @@ Shader "Futile/SRLighting" {
     	Cull Off
     	
 // -------------------------------------
-// Base pass: Sets frag to text+ambient light+color
+// Base pass:
 // -------------------------------------
         Pass {    
 
@@ -55,14 +55,14 @@ uniform sampler2D _MainTex;
 
 struct VertexInput {
 
-    float4 vertex : SV_POSITION; // used instead of POSITION;
+    float4 vertex : POSITION;
     float4 color : COLOR;
     float4 uv : TEXCOORD0;    
 };
 
 struct VertexOutput {
 
-    float4 pos : SV_POSITION; // used instead of POSITION;
+    float4 pos : POSITION;
     float4 color : COLOR;
     float2 uv : TEXCOORD0;
 };
@@ -110,20 +110,18 @@ uniform sampler2D _NormalTex; // normal map lighting texture (set to import type
 uniform float4 _LightColor0;  // color of light source 
 uniform float4 _SpecularColor; 
 uniform float _Shininess;
-uniform float4 _ObjectSpaceLightPos;
             
 struct vertexInput {
-    float4 vertex : SV_POSITION; // used instead of POSITION 
+    float4 vertex : POSITION; 
     float4 color : COLOR;
     float4 uv : TEXCOORD0;  
 };
 
 struct fragmentInput {
-    float4 pos : SV_POSITION; // used instead of POSITION
+    float4 pos : SV_POSITION;
     float4 color : COLOR0;
     float2 uv : TEXCOORD0;
-    float4 posWorld : TEXCOORD1; 
-
+    float4 posWorld : TEXCOORD1; // change this to distance to light and pass from vert to frag
 };
 
 // -------------------------------------
@@ -136,21 +134,13 @@ fragmentInput vert(vertexInput i){
     
     o.uv = float2(i.uv);
     o.color = i.color;
-                
+    
     return o;
 }
 
 // -------------------------------------
 float4 frag(fragmentInput i) : COLOR {
-            
-    // dist to point light
-    float3 vertexToLightSource = float3(_WorldSpaceLightPos0) - i.posWorld;
-    float3 distance = length(vertexToLightSource);    
-
-    // calc attenuation
-    float attenuation = 1.0 / distance; 
-    float3 lightDirection = normalize(vertexToLightSource);
-            
+                    
     // get value from normal map and sub 0.5 and mul by 2 to change RGB range 0..1 to normal range -1..1
     float3 normalDirection = (tex2D(_NormalTex, i.uv).xyz - 0.5f) * 2.0f;
     
@@ -162,15 +152,28 @@ float4 frag(fragmentInput i) : COLOR {
     
     // normalize direction
     normalDirection = normalize(normalDirection); 
+               
+    // dist to point light
+    float3 vertexToLightSource = float3(_WorldSpaceLightPos0) - i.posWorld;
+    float3 distance = length(vertexToLightSource);    
+
+    // calc attenuation
+    float attenuation = 1.0 / distance; 
+    float3 lightDirection = normalize(vertexToLightSource);
 
     // calc diffuse lighting
     float normalDotLight = dot(normalDirection, lightDirection);
-    float diffuseLevel = attenuation * normalDotLight; // removed max(0.0, normalDotLight); since assumiing normalDotLight > 0.0 
+    float diffuseLevel = attenuation * max(0.0, normalDotLight);
     
     // calc specular ligthing
-    // assuming normalDotLight > 0.0 (meaning light is on the correct side of mesh) as an optimization to avoid branching.
-    float3 viewDirection = float3(0.0, 0.0, -1.0); //  orthographic
-    float specularLevel = attenuation * pow(max(0.0, dot(reflect(-lightDirection, normalDirection), viewDirection)), _Shininess);
+    float specularLevel = 0.0;
+    // make sure the light is on the proper side
+    if (normalDotLight > 0.0){
+    
+        // since orthographic
+        float3 viewDirection = float3(0.0, 0.0, -1.0);
+        specularLevel = attenuation * pow(max(0.0, dot(reflect(-lightDirection, normalDirection), viewDirection)), _Shininess);
+    }
 
     // calc color components
     float4 diffuseColor = tex2D(_MainTex, i.uv);
