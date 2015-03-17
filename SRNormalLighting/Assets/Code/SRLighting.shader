@@ -177,8 +177,8 @@ float4 frag(fragmentInput i) : COLOR {
     float3 diffuseReflection = float3(diffuseColor) * diffuseLevel * i.color * float3(_LightColor0);
     float3 specularReflection = float3(_SpecularColor) * specularLevel * i.color * float3(_LightColor0);
     
-    // use the alpha from diffuse
-    return float4(diffuseReflection + specularReflection, diffuseColor.a);
+    // use the alpha from diffuse. it's not perfect if not also mul by diffuseColor.a 
+    return diffuseColor.a * float4(diffuseReflection + specularReflection, diffuseColor.a);
 }    
 
 ENDCG        
