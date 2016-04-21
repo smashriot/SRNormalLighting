@@ -130,6 +130,17 @@ public class FAtlasManager
 		}
 	}
 
+	// ADDED
+	public void printAtlasNames(){
+
+		int atlasCount = _atlases.Count;
+		for (int a = atlasCount-1; a>=0; a--){
+			
+			FAtlas atlas = _atlases[a];
+			Debug.Log("ATLAS[" + a + "] = NAME:" + atlas.name);
+		}
+	}
+	
 	public FAtlas LoadImage(string imagePath)
 	{
 		return LoadImage(imagePath,true);

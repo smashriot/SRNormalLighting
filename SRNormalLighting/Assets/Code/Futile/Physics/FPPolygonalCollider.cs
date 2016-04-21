@@ -47,7 +47,10 @@ public class FPPolygonalCollider : MonoBehaviour
 			collider.convex = FPUtils.CheckIfConvex(_polygonalData.sourceVertices);
 		}
 		
-		collider.smoothSphereCollisions = _polygonalData.shouldUseSmoothSphereCollisions;	
+		//  warning CS0618: `UnityEngine.MeshCollider.smoothSphereCollisions' is obsolete: `Configuring smooth sphere collisions is no longer needed. PhysX3 has a better behaviour in place.'
+		// http://docs.unity3d.com/ScriptReference/MeshCollider-smoothSphereCollisions.html
+		// UNITY5: commented out
+		// collider.smoothSphereCollisions = _polygonalData.shouldUseSmoothSphereCollisions;	
 		
 		return collider;
 	}

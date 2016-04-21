@@ -471,7 +471,7 @@ public class FNode
 		_container.AddChildAtIndex(this,_container.GetChildIndex(otherNode));
 	}
 
-	public bool isVisible
+	virtual public bool isVisible
 	{
 		get { return _isVisible;}
 		set 
@@ -505,13 +505,13 @@ public class FNode
         }
     }
 	
-	public float x
+	virtual public float x
 	{
 		get { return _x;}
 		set { _x = value; _isMatrixDirty = true;}
 	}
 	
-	public float y
+	virtual public float y
 	{
 		get { return _y;}
 		set { _y = value; _isMatrixDirty = true;}
@@ -547,7 +547,7 @@ public class FNode
 		set { _scaleX = value; scaleY = value; _isMatrixDirty = true;}
 	}
 	
-	public float rotation
+	virtual public float rotation
 	{
 		get { return _rotation;}
 		set { _rotation = value; _isMatrixDirty = true;}

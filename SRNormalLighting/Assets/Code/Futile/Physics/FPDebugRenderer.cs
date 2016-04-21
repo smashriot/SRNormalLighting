@@ -47,14 +47,14 @@ public class FPDebugRenderer : MonoBehaviour
 			
 			if(collider is BoxCollider)
 			{
-				FSprite sprite = new FSprite("Debug/Square");
+				FSprite sprite = new FSprite("Debug_Square");
 				sprite.color = _color;
 				
 				newNode = sprite;
 			}
 			else if(collider is SphereCollider)
 			{
-				FSprite sprite = new FSprite("Debug/Circle");
+				FSprite sprite = new FSprite("Debug_Circle");
 				sprite.color = _color;
 				
 				newNode = sprite;
@@ -71,7 +71,7 @@ public class FPDebugRenderer : MonoBehaviour
 		
 		if(mesh2D != null)
 		{
-			FPDebugPolygonColliderView debugView = new FPDebugPolygonColliderView("Debug/Triangle", mesh2D);
+			FPDebugPolygonColliderView debugView = new FPDebugPolygonColliderView("Debug_Triangle", mesh2D);
 			debugView.color = _color;
 			
 			_drawContainer.AddChild(debugView);	

@@ -47,7 +47,6 @@ public class FContainer : FNode
 				Futile.instance.SignalAfterUpdate += HandleUpdateAndSort;
 			}
 		}
-		
 	}
 	
 	override public void HandleRemovedFromStage()
@@ -102,7 +101,7 @@ public class FContainer : FNode
 		}
 	}
 
-	public void AddChildAtBack(FNode node) //a more explicit way to use AddChildAtIndex
+	public void AddChildAtBack(FNode node) // a more explicit way to use AddChildAtIndex
 	{
 		AddChildAtIndex(node,0);
 	}

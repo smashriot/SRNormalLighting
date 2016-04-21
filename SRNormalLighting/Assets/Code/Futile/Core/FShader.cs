@@ -13,7 +13,6 @@ public class FShader
 	public static FShader AdditiveColor;
 	public static FShader Solid;
 	public static FShader SolidColored;
-
 	public static FShader Basic_PixelSnap;
 
 	public string name;
@@ -43,37 +42,12 @@ public class FShader
 		AdditiveColor = new FShader("AdditiveColor", Shader.Find("Futile/AdditiveColor"));	
 		Solid = new FShader("Solid", Shader.Find("Futile/Solid"));	
 		SolidColored = new FShader("SolidColored", Shader.Find("Futile/SolidColored"));	
-
 		Basic_PixelSnap = new FShader("Basic_PixelSnap", Shader.Find("Futile/Basic_PixelSnap"));	
+
 		
 		defaultShader = Basic;
 	}
 }
-
-
-public class FBlurShader : FShader
-{
-	private float _blurAmount;
-	
-	public FBlurShader(float blurAmount) : base("BlurShader", Shader.Find("Futile/Blur"))
-	{
-		_blurAmount = blurAmount;
-		needsApply = true;
-	}
-	
-	override public void Apply(Material mat)
-	{
-		mat.SetFloat("_BlurForce",_blurAmount);
-	}
-	
-	public float blurAmount
-	{
-		get {return _blurAmount;}
-		set {if(_blurAmount != value) {_blurAmount = value; needsApply = true;}}
-	}
-}
-
-
 
 
 

@@ -35,7 +35,7 @@ public class FMeshData
 	public FMeshData(params FMeshFacet[] inFacets)
 	{
 		facets = new List<FMeshFacet>(inFacets);
-		
+
 		if(facets.Count != 0)
 		{
 			facetType = facets[0].facetType;
@@ -63,7 +63,7 @@ public class FMeshData
 	public void SetFacetCount(int numFacetsNeeded)
 	{
 		int facetCount = facets.Count;
-		
+
 		if(facetCount > numFacetsNeeded) //remove extra quads
 		{
 			facets.RemoveRange(0,facetCount-numFacetsNeeded);
@@ -77,7 +77,7 @@ public class FMeshData
 				facetCount++;
 			}
 		}
-		else 
+		else
 		{
 			while(facetCount < numFacetsNeeded) //add tris if needed
 			{
@@ -106,7 +106,7 @@ public class FMeshData
 		AddFacet(triangle);
 		return triangle;
 	}
-	
+
 	public FMeshTriangle AddTriangle(FMeshVertex vertex1, FMeshVertex vertex2, FMeshVertex vertex3)
 	{
 		FMeshTriangle triangle = new FMeshTriangle(vertex1,vertex2,vertex3);
@@ -125,7 +125,7 @@ public class FMeshData
 		AddFacet(quad);
 		return quad;
 	}
-	
+
 	public FMeshQuad AddQuad(FMeshQuad quad)
 	{
 		AddFacet(quad);
@@ -138,7 +138,7 @@ public class FMeshData
 		AddFacet(quad);
 		return quad;
 	}
-	
+
 	public FMeshQuad AddQuad(FMeshVertex vertex1, FMeshVertex vertex2, FMeshVertex vertex3, FMeshVertex vertex4)
 	{
 		FMeshQuad quad = new FMeshQuad(vertex1,vertex2,vertex3,vertex4);
@@ -173,7 +173,7 @@ public class FMeshFacet
 		vertex.y = y;
 		vertex.u = u;
 		vertex.v = v;
-		
+
 		return this; //for chaining
 	}
 
@@ -186,7 +186,7 @@ public class FMeshFacet
 		vertex.u = u;
 		vertex.v = v;
 		vertex.color = color;
-		
+
 		return this; //for chaining
 	}
 
@@ -231,7 +231,7 @@ public class FMeshFacet
 
 		for(int v = 0; v<count; v++)
 		{
-			vertices[v].color = color;	
+			vertices[v].color = color;
 		}
 
 		return this; //for chaining
@@ -240,13 +240,13 @@ public class FMeshFacet
 	public FMeshFacet OffsetPos(float offsetX, float offsetY)
 	{
 		int count = vertices.Length;
-		
+
 		for(int v = 0; v<count; v++)
 		{
 			vertices[v].x += offsetX;
-			vertices[v].y += offsetY;	
+			vertices[v].y += offsetY;
 		}
-		
+
 		return this; //for chaining
 	}
 }
@@ -277,7 +277,7 @@ public class FMeshQuad : FMeshFacet
 		vertices[1].SetPos(leftX+width,bottomY+height);
 		vertices[2].SetPos(leftX+width,bottomY);
 		vertices[3].SetPos(leftX,bottomY);
-		
+
 		return this; //for chaining
 	}
 
@@ -287,7 +287,7 @@ public class FMeshQuad : FMeshFacet
 		vertices[1].SetPos(rightX,topY);
 		vertices[2].SetPos(rightX,bottomY);
 		vertices[3].SetPos(leftX,bottomY);
-		
+
 		return this; //for chaining
 	}
 
@@ -297,12 +297,12 @@ public class FMeshQuad : FMeshFacet
 		float rightX = rect.xMax;
 		float bottomY = rect.yMin;
 		float topY = rect.yMax;
-		
+
 		vertices[0].SetPos(leftX,topY);
 		vertices[1].SetPos(rightX,topY);
 		vertices[2].SetPos(rightX,bottomY);
 		vertices[3].SetPos(leftX,bottomY);
-		
+
 		return this; //for chaining
 	}
 
@@ -312,7 +312,7 @@ public class FMeshQuad : FMeshFacet
 		vertices[1].SetUV(leftX+width,bottomY+height);
 		vertices[2].SetUV(leftX+width,bottomY);
 		vertices[3].SetUV(leftX,bottomY);
-		
+
 		return this; //for chaining
 	}
 
@@ -322,12 +322,12 @@ public class FMeshQuad : FMeshFacet
 		float rightX = rect.xMax;
 		float bottomY = rect.yMin;
 		float topY = rect.yMax;
-		
+
 		vertices[0].SetUV(leftX,topY);
 		vertices[1].SetUV(rightX,topY);
 		vertices[2].SetUV(rightX,bottomY);
 		vertices[3].SetUV(leftX,bottomY);
-		
+
 		return this; //for chaining
 	}
 
@@ -337,7 +337,7 @@ public class FMeshQuad : FMeshFacet
 		vertices[1].SetUV(rightX,topY);
 		vertices[2].SetUV(rightX,bottomY);
 		vertices[3].SetUV(leftX,bottomY);
-		
+
 		return this; //for chaining
 	}
 
@@ -347,7 +347,7 @@ public class FMeshQuad : FMeshFacet
 		vertices[1].SetUV(1.0f,1.0f);
 		vertices[2].SetUV(1.0f,0.0f);
 		vertices[3].SetUV(0.0f,0.0f);
-		
+
 		return this; //for chaining
 	}
 
@@ -362,7 +362,7 @@ public class FMeshQuad : FMeshFacet
 		vertices[1].SetUV(rightX,topY);
 		vertices[2].SetUV(rightX,bottomY);
 		vertices[3].SetUV(leftX,bottomY);
-		
+
 		return this; //for chaining
 	}
 }
@@ -380,7 +380,7 @@ public class FMeshTriangle : FMeshFacet
 		facetType = FFacetType.Triangle;
 		this.vertices = vertices;
 	}
-	
+
 	public FMeshTriangle(FMeshVertex vertex1, FMeshVertex vertex2, FMeshVertex vertex3)
 	{
 		facetType = FFacetType.Triangle;

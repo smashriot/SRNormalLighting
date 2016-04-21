@@ -6,7 +6,7 @@ public class FMeshNode : FFacetElementNode
 {
 	protected Color _color = Futile.white;
 	protected Color _alphaColor = Futile.white;
-	
+
 	protected bool _isMeshDirty = false;
 
 	protected FMeshData _meshData;
@@ -29,7 +29,7 @@ public class FMeshNode : FFacetElementNode
 	public FMeshNode (FFacetType facetType, FAtlasElement element) : this(new FMeshData(facetType), element)
 	{
 	}
-	
+
 	public FMeshNode (FMeshData meshData, string elementName) : this(meshData, Futile.atlasManager.GetElementWithName(elementName))
 	{
 	}
@@ -43,7 +43,7 @@ public class FMeshNode : FFacetElementNode
 	{
 		_meshData = meshData;
 		_previousMeshDataVersion = _meshData.version;
-		
+
 		Init(_meshData.facetType, element,meshData.facets.Count);
 
 		_isMeshDirty = true;
@@ -54,7 +54,7 @@ public class FMeshNode : FFacetElementNode
 	{
 		base.HandleAddedToStage();
 
-		if(_previousMeshDataVersion < _meshData.version) 
+		if(_previousMeshDataVersion < _meshData.version)
 		{
 			HandleMeshDataChanged();
 		}
@@ -81,7 +81,7 @@ public class FMeshNode : FFacetElementNode
 			_stage.HandleFacetsChanged();
 		}
 	}
-	
+
 	override public void HandleElementChanged()
 	{
 		_isMeshDirty = true;
@@ -91,39 +91,39 @@ public class FMeshNode : FFacetElementNode
 		_uvOffsetX = _element.uvRect.xMin;
 		_uvOffsetY = _element.uvRect.yMin;
 	}
-	
+
 	override public void Redraw(bool shouldForceDirty, bool shouldUpdateDepth)
 	{
 		bool wasMatrixDirty = _isMatrixDirty;
 		bool wasAlphaDirty = _isAlphaDirty;
-		
+
 		UpdateDepthMatrixAlpha(shouldForceDirty, shouldUpdateDepth);
-		
+
 		if(shouldUpdateDepth)
 		{
 			UpdateFacets();
 		}
-		
+
 		if(wasMatrixDirty || shouldForceDirty || shouldUpdateDepth)
 		{
 			_isMeshDirty = true;
 		}
-		
+
 		if(wasAlphaDirty || shouldForceDirty)
 		{
 			_isMeshDirty = true;
-			_color.ApplyMultipliedAlpha(ref _alphaColor, _concatenatedAlpha);	
+			_color.ApplyMultipliedAlpha(ref _alphaColor, _concatenatedAlpha);
 		}
-		
-		if(_isMeshDirty) 
+
+		if(_isMeshDirty)
 		{
 			PopulateRenderLayer();
 		}
 	}
-	
+
 	override public void PopulateRenderLayer()
 	{
-		if(_isOnStage && _firstFacetIndex != -1) 
+		if(_isOnStage && _firstFacetIndex != -1)
 		{
 			_isMeshDirty = false;
 
@@ -137,7 +137,7 @@ public class FMeshNode : FFacetElementNode
 			Vector3[] vertices = _renderLayer.vertices;
 			Vector2[] uvs = _renderLayer.uvs;
 			Color[] colors = _renderLayer.colors;
-			
+
 			List<FMeshFacet> facets = _meshData.facets;
 			int facetCount = facets.Count;
 
@@ -153,32 +153,32 @@ public class FMeshNode : FFacetElementNode
 				{
 					FMeshFacet facet = facets[f];
 
-					//outVector.x = localVector.x*a + localVector.y*c + tx;
-					//outVector.y = localVector.x*b + localVector.y*d + ty;
-					//outVector.z = z;
+                    //outVector.x = localVector.x*a + localVector.y*c + tx;
+                    //outVector.y = localVector.x*b + localVector.y*d + ty;
+                    //outVector.z = z;
 
-					FMeshVertex[] meshVertices = facet.vertices;
+                    FMeshVertex[] meshVertices = facet.vertices;
 
-					vertex = meshVertices[0];
-					vertices[vertexIndex0] = new Vector3(vertex.x*a + vertex.y*c + tx,vertex.x*b + vertex.y*d + ty,_meshZ);
-					vertex = meshVertices[1];
-					vertices[vertexIndex1] = new Vector3(vertex.x*a + vertex.y*c + tx,vertex.x*b + vertex.y*d + ty,_meshZ);
-					vertex = meshVertices[2];
-					vertices[vertexIndex2] = new Vector3(vertex.x*a + vertex.y*c + tx,vertex.x*b + vertex.y*d + ty,_meshZ);
+                    vertex = meshVertices[0];
+                    vertices[vertexIndex0] = new Vector3(vertex.x*a + vertex.y*c + tx,vertex.x*b + vertex.y*d + ty,_meshZ);
+                    vertex = meshVertices[1];
+                    vertices[vertexIndex1] = new Vector3(vertex.x*a + vertex.y*c + tx,vertex.x*b + vertex.y*d + ty,_meshZ);
+                    vertex = meshVertices[2];
+                    vertices[vertexIndex2] = new Vector3(vertex.x*a + vertex.y*c + tx,vertex.x*b + vertex.y*d + ty,_meshZ);
 
-					//this needs to be offset by the element uvs, so that the uvs are relative to the element (add then multiply element uv)
-					uvs[vertexIndex0] = new Vector2(_uvOffsetX + meshVertices[0].u * _uvScaleX,_uvOffsetY + meshVertices[0].v * _uvScaleY);
-					uvs[vertexIndex1] = new Vector2(_uvOffsetX + meshVertices[1].u * _uvScaleX,_uvOffsetY + meshVertices[1].v * _uvScaleY);
-					uvs[vertexIndex2] = new Vector2(_uvOffsetX + meshVertices[2].u * _uvScaleX,_uvOffsetY + meshVertices[2].v * _uvScaleY);
+                    //this needs to be offset by the element uvs, so that the uvs are relative to the element (add then multiply element uv)
+                    uvs[vertexIndex0] = new Vector2(_uvOffsetX + meshVertices[0].u * _uvScaleX,_uvOffsetY + meshVertices[0].v * _uvScaleY);
+                    uvs[vertexIndex1] = new Vector2(_uvOffsetX + meshVertices[1].u * _uvScaleX,_uvOffsetY + meshVertices[1].v * _uvScaleY);
+                    uvs[vertexIndex2] = new Vector2(_uvOffsetX + meshVertices[2].u * _uvScaleX,_uvOffsetY + meshVertices[2].v * _uvScaleY);
 
-					//could also use vertex colours here!
-					colors[vertexIndex0] = _alphaColor * meshVertices[0].color;
-					colors[vertexIndex1] = _alphaColor * meshVertices[1].color;
-					colors[vertexIndex2] = _alphaColor * meshVertices[2].color;
+                    //could also use vertex colours here!
+                    colors[vertexIndex0] = _alphaColor * meshVertices[0].color;
+                    colors[vertexIndex1] = _alphaColor * meshVertices[1].color;
+                    colors[vertexIndex2] = _alphaColor * meshVertices[2].color;
 
-					vertexIndex0 += 3;
-					vertexIndex1 += 3;
-					vertexIndex2 += 3;
+                    vertexIndex0 += 3;
+                    vertexIndex1 += 3;
+                    vertexIndex2 += 3;
 				}
 
 			}
@@ -188,11 +188,11 @@ public class FMeshNode : FFacetElementNode
 				int vertexIndex1 = vertexIndex0 + 1;
 				int vertexIndex2 = vertexIndex0 + 2;
 				int vertexIndex3 = vertexIndex0 + 3;
-				
+
 				for(int f = 0; f<facetCount; f++)
 				{
 					FMeshFacet facet = facets[f];
-					
+
 					FMeshVertex[] meshVertices = facet.vertices;
 					vertex = meshVertices[0];
 					vertices[vertexIndex0] = new Vector3(vertex.x*a + vertex.y*c + tx,vertex.x*b + vertex.y*d + ty,_meshZ);
@@ -208,33 +208,33 @@ public class FMeshNode : FFacetElementNode
 					uvs[vertexIndex1] = new Vector2(_uvOffsetX + meshVertices[1].u * _uvScaleX,_uvOffsetY + meshVertices[1].v * _uvScaleY);
 					uvs[vertexIndex2] = new Vector2(_uvOffsetX + meshVertices[2].u * _uvScaleX,_uvOffsetY + meshVertices[2].v * _uvScaleY);
 					uvs[vertexIndex3] = new Vector2(_uvOffsetX + meshVertices[3].u * _uvScaleX,_uvOffsetY + meshVertices[3].v * _uvScaleY);
-					
+
 					//could also use vertex colours here!
 					colors[vertexIndex0] = _alphaColor * meshVertices[0].color;
 					colors[vertexIndex1] = _alphaColor * meshVertices[1].color;
 					colors[vertexIndex2] = _alphaColor * meshVertices[2].color;
 					colors[vertexIndex3] = _alphaColor * meshVertices[3].color;
-					
+
 					vertexIndex0 += 4;
 					vertexIndex1 += 4;
 					vertexIndex2 += 4;
 					vertexIndex3 += 4;
 				}
-				
+
 			}
 
 			_renderLayer.HandleVertsChange();
 		}
 	}
 
-	virtual public Color color 
+	virtual public Color color
 	{
 		get { return _color; }
-		set 
-		{ 
+		set
+		{
 			if(_color != value)
 			{
-				_color = value; 
+				_color = value;
 				_isAlphaDirty = true;
 			}
 		}
@@ -243,7 +243,7 @@ public class FMeshNode : FFacetElementNode
 	public FMeshData meshData
 	{
 		get {return _meshData;}
-		set 
+		set
 		{
 			if(_meshData != value)
 			{

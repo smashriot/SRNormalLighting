@@ -190,6 +190,9 @@ public class FButton : FContainer, FSingleTouchableInterface
 		
 		if(_hitRect.Contains(touchPos))
 		{
+
+			//Debug.Log("HIT!!!! TOUCH " + touch.position + " AT: " + touchPos + " HIT RECT:" + _hitRect + " AND THIS:" + this.x + "," + this.y);
+
 			if(_isEnabled) //swallow touches all the time, but only listen to them when enabled
 			{
 				_sprite.element = _downElement;
@@ -367,6 +370,16 @@ public class FButton : FContainer, FSingleTouchableInterface
 		return new Vector2(_anchorX,_anchorY);	
 	}
 	
+	// ADDED:
+	public void Activate(){ // ADDED
+		
+		if (SignalRelease != null) SignalRelease(this);
+	}
+
+	// ADDED:
+	//public void HoverOver(){ // ADDED -- doesn't work since UpdateOverState does mouse checking
+	//	isTouchOver = true;
+	//}
 	
 }
 
